@@ -7,3 +7,9 @@ project.xcworkspace/
 xcuserstate/
 *.xcuserstate
 ../../../../../uwei.xcuserdatad/
+
+*.xcbkptlist
+
+*.xcscheme
+
+*.plist

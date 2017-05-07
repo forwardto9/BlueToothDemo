@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BCT-PP-FQp">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,27 +20,49 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1RC-t2-ztG">
-                                <rect key="frame" x="172" y="318" width="30" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="Y4v-pH-4db"/>
-                                    <constraint firstAttribute="height" constant="30" id="xxK-rX-7SQ"/>
-                                </constraints>
-                                <state key="normal" title="Find"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="IxA-nv-Y6g">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
-                                    <action selector="findPerihperal:" destination="BYZ-38-t0r" eventType="touchUpInside" id="eE9-IF-yjC"/>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="eaa-mH-uug"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="3Vi-ew-kHa"/>
                                 </connections>
-                            </button>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="1RC-t2-ztG" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="agT-cg-cOk"/>
-                            <constraint firstItem="1RC-t2-ztG" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="lUG-of-p9Y"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="IxA-nv-Y6g" secondAttribute="bottom" id="B7y-mx-hjF"/>
+                            <constraint firstItem="IxA-nv-Y6g" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Hvi-k5-mX7"/>
+                            <constraint firstAttribute="trailing" secondItem="IxA-nv-Y6g" secondAttribute="trailing" id="P3T-rr-oiF"/>
+                            <constraint firstItem="IxA-nv-Y6g" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="ct2-8R-u3M"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="Ag7-K3-jLa"/>
+                    <connections>
+                        <outlet property="peripheralTableView" destination="IxA-nv-Y6g" id="82y-RA-ZRd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1076" y="137.18140929535232"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="BX7-Cb-NTZ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BCT-PP-FQp" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="UJ3-99-9SO">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="pVV-UY-ZbN"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bdi-8l-p6i" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="133.59999999999999" y="791.15442278860576"/>
         </scene>
     </scenes>
 </document>
