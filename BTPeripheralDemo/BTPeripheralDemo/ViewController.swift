@@ -34,7 +34,7 @@ class ViewController: UIViewController, CBPeripheralManagerDelegate {
     }
     @IBAction func startAd(_ sender: Any) {
         if serviceCount == 2 {
-            peripheralManager?.startAdvertising([CBAdvertisementDataLocalNameKey:"uwei_service" , CBAdvertisementDataServiceUUIDsKey : [notifyUUID, rwUUID]])
+            peripheralManager?.startAdvertising([CBAdvertisementDataLocalNameKey:"uwei service" , CBAdvertisementDataServiceUUIDsKey : [notifyUUID, rwUUID]])
         }
         
     }
@@ -80,7 +80,7 @@ class ViewController: UIViewController, CBPeripheralManagerDelegate {
     }
     
     func peripheralManager(_ peripheral: CBPeripheralManager, didAdd service: CBService, error: Error?) {
-        print("didAdd")
+        print("didAdd service")
         if  error != nil {
             print("add service error\(error!)")
         } else {
@@ -89,28 +89,32 @@ class ViewController: UIViewController, CBPeripheralManagerDelegate {
     }
 
     func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
-        print("didStartAd")
+        print("DidStartAdvertising")
         if error != nil {
             print("didStartad error \(error!)")
         }
     }
     
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
-        print("read request")
-        if request.characteristic == notifyCharacteristic {
-            let data = request.characteristic.value
-            request.value = data
+        print("didReceiveRead")
+        if request.characteristic == rwableCharacteristic {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "YYYY-MM-dd hh:mm:ss"
+            let dateString = dateFormatter.string(from: Date())
+            request.value = (dateString as NSString).data(using: String.Encoding.utf8.rawValue)!
             peripheralManager?.respond(to: request, withResult: .success)
         }
     }
     
     
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveWrite requests: [CBATTRequest]) {
+        print("didReceiveWrite")
         let request = requests.first
         if request?.characteristic == rwableCharacteristic {
             let c = request?.characteristic as! CBMutableCharacteristic
             c.value = request?.value
             peripheral.respond(to: request!, withResult: .success)
+            print("get data from centeral is \(String(data: c.value!, encoding: .utf8)!)")
         }
     }
     
@@ -126,6 +130,7 @@ class ViewController: UIViewController, CBPeripheralManagerDelegate {
     
     func peripheralManagerIsReady(toUpdateSubscribers peripheral: CBPeripheralManager) {
         // resend for update
+        sendDataTimer?.fire()
     }
     
     
