@@ -98,7 +98,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
         
         for p in peripherals {
-            centralManager?.cancelPeripheralConnection(p)
+            if p.state == .connected {
+                centralManager?.cancelPeripheralConnection(p)
+            }
         }
     }
     
@@ -135,9 +137,13 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("connected!")
         centralCBPeripheral!.delegate = self
+        centralCBPeripheral?.readRSSI()
         centralCBPeripheral!.discoverServices([notifyUUID, rwUUID])
     }
     
+    func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
+        print("RSSI is \(RSSI.floatValue)")
+    }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if centralCBPeripheral!.services != nil {
