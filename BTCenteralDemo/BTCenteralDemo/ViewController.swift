@@ -27,6 +27,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         // Do any additional setup after loading the view, typically from a nib.
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(ViewController.findPerihperal))
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(ViewController.trashPeripheral))
+        self.navigationItem.leftBarButtonItem?.isEnabled = false
         
         peripheralTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
@@ -47,9 +48,12 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
+        
         if self.peripherals.count > 0 {
-            cell.textLabel?.text = peripherals[indexPath.row].name
+            cell.textLabel?.text = (peripherals[indexPath.row].name ?? "name is null")
+            cell.detailTextLabel?.text = peripherals[indexPath.row].identifier.uuidString
         }
         return cell
     }
@@ -63,6 +67,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
         if let _ = centralManager?.isScanning {
             centralManager?.stopScan()
+            self.navigationItem.rightBarButtonItem?.isEnabled = false
             print("didStop")
         }
         
@@ -74,6 +79,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         // 第一个参数为nil，将搜索所有
 //        let sUUID = CBUUID(string: "83951652-DF2E-4CF7-8E45-FCE84073F705")
 //        centralManager?.scanForPeripherals(withServices: [sUUID], options: nil)
+        self.navigationItem.rightBarButtonItem?.isEnabled = false
+        self.navigationItem.leftBarButtonItem?.isEnabled  = true
         peripherals.removeAll()
         peripheralTableView.reloadData()
         
@@ -81,8 +88,15 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     }
 
     func trashPeripheral() -> Void {
+        self.navigationItem.leftBarButtonItem?.isEnabled = false
+        self.navigationItem.rightBarButtonItem?.isEnabled = true
         peripherals.removeAll()
         peripheralTableView.reloadData()
+        
+        if let _ = centralManager?.isScanning {
+            centralManager?.stopScan()
+        }
+        
         for p in peripherals {
             centralManager?.cancelPeripheralConnection(p)
         }
@@ -144,9 +158,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         for characteristic in service.characteristics! {
             print("discover characteristic \(characteristic)")
-            if characteristic.uuid == notifyChracatorUUID {
-                centralCBPeripheral!.setNotifyValue(true, for: characteristic)
-            }
+//            if characteristic.uuid == notifyChracatorUUID {
+//                centralCBPeripheral!.setNotifyValue(true, for: characteristic)
+//            }
             if characteristic.uuid == rwChracatorUUID {
                 let readData = ("uwei").data(using: .utf8)
                 centralCBPeripheral?.writeValue(readData!, for: characteristic, type: CBCharacteristicWriteType.withResponse)
@@ -155,19 +169,17 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     }
     
     
-    
+    //This method is invoked when your app calls the setNotifyValue(_:for:) method.
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
         if error != nil {
             print("error changing notification state \(error!)")
         } else {
-            centralCBPeripheral!.readValue(for: characteristic)
+//            centralCBPeripheral!.readValue(for: characteristic)
         }
     }
-    
-    
+    //This method is invoked when your app calls the readValue(for:) method, or when the peripheral notifies your app that the value of the characteristic for which notifications and indications are enabled (via a successful call to setNotifyValue(_:for:)) has changed.
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         let data = characteristic.value
-        
         
         if data != nil {
             print("did update value is \(NSString.init(data: data!, encoding: String.Encoding.utf8.rawValue)!)")
@@ -176,10 +188,14 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
+    //Invoked when you write data to a characteristic’s value.
+    //This method is invoked only when your app calls the writeValue(_:for:type:) method with the withResponse constant specified as the write type
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         print("did write value")
         if error != nil {
             print("error is \(error!)")
+        } else {
+            centralCBPeripheral!.readValue(for: characteristic)
         }
     }
 }
