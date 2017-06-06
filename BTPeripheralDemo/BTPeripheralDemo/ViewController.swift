@@ -69,6 +69,7 @@ class ViewController: UIViewController, CBPeripheralManagerDelegate {
             
             break;
         case .poweredOff:
+            peripheralManager?.removeAllServices()
             print("peripheral off")
             break;
         case .unsupported:
@@ -139,6 +140,7 @@ class ViewController: UIViewController, CBPeripheralManagerDelegate {
         dateFormatter.dateFormat = "YYYY-MM-dd hh:mm:ss"
         let dateString = dateFormatter.string(from: Date())
         
+        // If the length of the value parameter exceeds the length of the maximumUpdateValueLength property of a subscribed CBCentral, the value parameter is truncated accordingly.
         let didSend = peripheralManager!.updateValue((dateString as NSString).data(using: String.Encoding.utf8.rawValue)!, for: notifyCharacteristic!, onSubscribedCentrals: nil)
         print("send result \(didSend)")
     }
