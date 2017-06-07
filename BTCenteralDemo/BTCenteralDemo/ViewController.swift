@@ -104,6 +104,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
+    
+    // MARK:- Monitoring Changes to the Central Manager’s State
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         print("centeral did update")
         switch central.state {
@@ -124,6 +126,11 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
+    func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
+        //
+    }
+    
+    // MARK:- Discovering and Retrieving Peripherals
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         print("did discover peripheral ad data is \(advertisementData)")
         if peripherals.contains(peripheral) {
@@ -134,6 +141,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
+    
+    // MARK:- Monitoring Connections with Peripherals
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("connected!")
         centralCBPeripheral!.delegate = self
@@ -141,10 +150,20 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         centralCBPeripheral!.discoverServices([notifyUUID, rwUUID])
     }
     
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        //
+    }
+    
+    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        //
+    }
+    
+    // MARK:- Retrieving a Peripheral’s Received Signal Strength Indicator (RSSI) Data
     func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
         print("RSSI is \(RSSI.floatValue)")
     }
     
+    // MARK:- Discovering Services
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if centralCBPeripheral!.services != nil {
             for service in centralCBPeripheral!.services! {
@@ -161,6 +180,12 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
     }
     
+    //Invoked when you discover the included services of a specified service.
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverIncludedServicesFor service: CBService, error: Error?) {
+        //
+    }
+    
+    // MARK:- Discovering Characteristics and Characteristic Descriptors
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         for characteristic in service.characteristics! {
             print("discover characteristic \(characteristic)")
@@ -174,7 +199,11 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverDescriptorsFor characteristic: CBCharacteristic, error: Error?) {
+        //
+    }
     
+    //MARK:- Managing Notifications for a Characteristic’s Value
     //This method is invoked when your app calls the setNotifyValue(_:for:) method.
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
         if error != nil {
@@ -183,6 +212,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
 //            centralCBPeripheral!.readValue(for: characteristic)
         }
     }
+    
+    // MARK:- Retrieving Characteristic and Characteristic Descriptor Values
     //This method is invoked when your app calls the readValue(for:) method, or when the peripheral notifies your app that the value of the characteristic for which notifications and indications are enabled (via a successful call to setNotifyValue(_:for:)) has changed.
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         let data = characteristic.value
@@ -194,6 +225,12 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
+    // This method is invoked when your app calls the readValue(for:) method.
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor descriptor: CBDescriptor, error: Error?) {
+        //
+    }
+    
+    //MARK:- Writing Characteristic and Characteristic Descriptor Values
     //Invoked when you write data to a characteristic’s value.
     //This method is invoked only when your app calls the writeValue(_:for:type:) method with the withResponse constant specified as the write type
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
@@ -203,6 +240,26 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         } else {
             centralCBPeripheral!.readValue(for: characteristic)
         }
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor descriptor: CBDescriptor, error: Error?) {
+        //
+    }
+    
+    // MARK:- Monitoring Changes to a Peripheral’s Name or Services
+    // name
+    func peripheralDidUpdateName(_ peripheral: CBPeripheral) {
+        //
+    }
+    
+    // service
+    
+    //A service is removed from the peripheral’s database
+    //A new service is added to the peripheral’s database
+    //A service that was previously removed from the peripheral’s database is readded to the database at a different location
+    func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
+        //
+        centralCBPeripheral?.discoverServices([invalidatedServices[0].uuid])
     }
 }
 

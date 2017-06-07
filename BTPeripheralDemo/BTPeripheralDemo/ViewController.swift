@@ -59,6 +59,7 @@ class ViewController: UIViewController, CBPeripheralManagerDelegate {
         peripheralManager?.add(rwService!)
     }
     
+    // MARK:- Monitoring Changes to the Peripheral Manager’s State
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         print("did update state")
         switch peripheral.state {
@@ -80,6 +81,11 @@ class ViewController: UIViewController, CBPeripheralManagerDelegate {
         }
     }
     
+    func peripheralManager(_ peripheral: CBPeripheralManager, willRestoreState dict: [String : Any]) {
+        //
+    }
+    
+    //MARK:- Adding Services
     func peripheralManager(_ peripheral: CBPeripheralManager, didAdd service: CBService, error: Error?) {
         print("didAdd service")
         if  error != nil {
@@ -89,6 +95,8 @@ class ViewController: UIViewController, CBPeripheralManagerDelegate {
         }
     }
 
+    // MARK:- Advertising Peripheral Data
+    // Invoked when you start advertising the local peripheral device’s data.
     func peripheralManagerDidStartAdvertising(_ peripheral: CBPeripheralManager, error: Error?) {
         print("DidStartAdvertising")
         if error != nil {
@@ -96,6 +104,8 @@ class ViewController: UIViewController, CBPeripheralManagerDelegate {
         }
     }
     
+    // MARK:- Receiving Read and Write Requests
+    //read
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
         print("didReceiveRead")
         if request.characteristic == rwableCharacteristic {
@@ -107,7 +117,7 @@ class ViewController: UIViewController, CBPeripheralManagerDelegate {
         }
     }
     
-    
+    //write
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveWrite requests: [CBATTRequest]) {
         print("didReceiveWrite")
         let request = requests.first
@@ -119,7 +129,7 @@ class ViewController: UIViewController, CBPeripheralManagerDelegate {
         }
     }
     
-    
+    // MARK:- Monitoring Subscriptions to Characteristic Values
     func peripheralManager(_ peripheral: CBPeripheralManager, central: CBCentral, didSubscribeTo characteristic: CBCharacteristic) {
         sendDataTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(ViewController.sendCurrentTime), userInfo: characteristic, repeats: true)
         sendDataTimer?.fire()
