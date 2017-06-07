@@ -31,7 +31,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
         peripheralTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
-        centralManager = CBCentralManager(delegate: self, queue: nil)
+//        centralManager = CBCentralManager(delegate: self, queue: nil)
+        //使用这个方法是为了做到 State Preservation and Restoration
+        centralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey:true, CBCentralManagerOptionRestoreIdentifierKey:"E9368926-1C37-4461-BE6A-DABA8EEE68CC"])
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,7 +73,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             print("didStop")
         }
         
-        centralManager?.connect(centralCBPeripheral!, options: [CBConnectPeripheralOptionNotifyOnConnectionKey:true])
+        centralManager?.connect(centralCBPeripheral!, options: [CBConnectPeripheralOptionNotifyOnConnectionKey:true, CBConnectPeripheralOptionNotifyOnDisconnectionKey:true])
     }
     
     
@@ -128,6 +130,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     
     func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
         //
+        let peripherals = dict[CBCentralManagerRestoredStatePeripheralsKey]
+        print(peripherals ?? "peripherals is nil")
     }
     
     // MARK:- Discovering and Retrieving Peripherals
