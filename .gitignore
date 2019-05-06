@@ -2,16 +2,8 @@
 
 .DS_Store
 
-*.xcworkspace
-
-project.xcworkspace
-
 xcuserstate/
-
 *.xcuserstate
-
 *.xcbkptlist
-
 *.xcscheme
-
 xcschememanagement.plist
