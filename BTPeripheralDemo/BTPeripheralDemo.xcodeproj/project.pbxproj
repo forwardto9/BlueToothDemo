@@ -120,7 +120,7 @@
 			};
 			buildConfigurationList = C2DF3E7A1EBDB18B00A1B507 /* Build configuration list for PBXProject "BTPeripheralDemo" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -284,8 +284,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.teg.BTPeripheralDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "bb0209c8-99c4-4ea7-9325-8783df0afa28";
-				PROVISIONING_PROFILE_SPECIFIER = "teg-common-dev";
-				SWIFT_VERSION = 3.0;
+				PROVISIONING_PROFILE_SPECIFIER = common_dev;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -299,7 +299,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tencent.teg.BTPeripheralDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

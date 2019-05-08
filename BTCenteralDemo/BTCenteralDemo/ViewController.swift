@@ -77,7 +77,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     }
     
     
-    func findPerihperal() {
+    @objc func findPerihperal() {
         // 第一个参数为nil，将搜索所有
 //        let sUUID = CBUUID(string: "83951652-DF2E-4CF7-8E45-FCE84073F705")
 //        centralManager?.scanForPeripherals(withServices: [sUUID], options: nil)
@@ -89,7 +89,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         centralManager?.scanForPeripherals(withServices: nil, options: nil)
     }
 
-    func trashPeripheral() -> Void {
+    @objc func trashPeripheral() -> Void {
         self.navigationItem.leftBarButtonItem?.isEnabled = false
         self.navigationItem.rightBarButtonItem?.isEnabled = true
         peripherals.removeAll()

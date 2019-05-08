@@ -145,7 +145,7 @@ class ViewController: UIViewController, CBPeripheralManagerDelegate {
     }
     
     
-    func sendCurrentTime() -> Void {
+    @objc func sendCurrentTime() -> Void {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd hh:mm:ss"
         let dateString = dateFormatter.string(from: Date())
